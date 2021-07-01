@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alibaba.nacos.client.utils;
 
+import com.alibaba.nacos.api.common.Constants;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -26,12 +28,12 @@ import java.util.Map;
  * @author Nacos
  */
 public class EnvUtil {
-
-    final static public Logger LOGGER = LogUtils.logger(EnvUtil.class);
-
+    
+    public static final Logger LOGGER = LogUtils.logger(EnvUtil.class);
+    
     public static void setSelfEnv(Map<String, List<String>> headers) {
         if (headers != null) {
-            List<String> amorayTagTmp = headers.get(AMORY_TAG);
+            List<String> amorayTagTmp = headers.get(Constants.AMORY_TAG);
             if (amorayTagTmp == null) {
                 if (selfAmorayTag != null) {
                     selfAmorayTag = null;
@@ -44,8 +46,8 @@ public class EnvUtil {
                     LOGGER.warn("selfAmoryTag:{}", selfAmorayTag);
                 }
             }
-
-            List<String> vipserverTagTmp = headers.get(VIPSERVER_TAG);
+            
+            List<String> vipserverTagTmp = headers.get(Constants.VIPSERVER_TAG);
             if (vipserverTagTmp == null) {
                 if (selfVipserverTag != null) {
                     selfVipserverTag = null;
@@ -58,7 +60,7 @@ public class EnvUtil {
                     LOGGER.warn("selfVipserverTag:{}", selfVipserverTag);
                 }
             }
-            List<String> locationTagTmp = headers.get(LOCATION_TAG);
+            List<String> locationTagTmp = headers.get(Constants.LOCATION_TAG);
             if (locationTagTmp == null) {
                 if (selfLocationTag != null) {
                     selfLocationTag = null;
@@ -73,41 +75,35 @@ public class EnvUtil {
             }
         }
     }
-
+    
     public static String getSelfAmorayTag() {
         return selfAmorayTag;
     }
-
+    
     public static String getSelfVipserverTag() {
         return selfVipserverTag;
     }
-
+    
     public static String getSelfLocationTag() {
         return selfLocationTag;
     }
-
-    public static String listToString(List<String> list) {
-        if (list == null) {
+    
+    private static String listToString(List<String> list) {
+        if (list == null || list.isEmpty()) {
             return null;
         }
         StringBuilder result = new StringBuilder();
-        boolean first = true;
-        // 第一个前面不拼接","
         for (String string : list) {
-            if (first) {
-                first = false;
-            } else {
-                result.append(",");
-            }
             result.append(string);
+            result.append(",");
         }
-        return result.toString();
+        return result.toString().substring(0, result.length() - 1);
     }
-
+    
     private static String selfAmorayTag;
+    
     private static String selfVipserverTag;
+    
     private static String selfLocationTag;
-    public final static String AMORY_TAG = "Amory-Tag";
-    public final static String VIPSERVER_TAG = "Vipserver-Tag";
-    public final static String LOCATION_TAG = "Location-Tag";
+    
 }
